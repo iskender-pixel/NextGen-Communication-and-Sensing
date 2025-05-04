@@ -2,41 +2,53 @@ import skrf as rf
 import numpy as np
 import matplotlib.pyplot as plt
 
-def getR(S12, f, G):
+def getR(S12, f, G):    #Calculates the distance between the horns based on Friis equation
+    S12 = abs(S12)  #Absolute value is relevant for power transfer
 
-    wavelength = 3e8/f
-    r = np.sqrt((wavelength**2*G**2)/(4*np.pi**2*S12))
+    wavelength = 2.997e8/f
+    r = (wavelength*G)/(4*np.pi*S12)
 
     return r
 
 def getG(S12, f, r):
+    S12 = abs(S12)  # Absolute value is relevant for power transfer
 
     wavelength = 3e8 / f
 
-    G = np.sqrt((S12*4*np.pi**2*r**2)/(wavelength**2))
+    G = (S12*np.pi*r)/(wavelength)
 
     return G
 
 if __name__ == '__main__':
 
-    one_nineteen_meter = rf.Network('Data2/direction0.s2p')
-    half_meter = rf.Network('Data2/direction0-0.5m.s2p')
-    one_meter = rf.Network('Data2/direction0-1m.s2p')
+    net129cm = rf.Network('direction0-1.29v2.s2p')
+    net50cm = rf.Network('direction0-0.5mv2.s2p')
+    net100cm = rf.Network('direction0-1mv2.s2p')
 
-    f = one_nineteen_meter.frequency.f[int(len(one_nineteen_meter.s12.s)/2)]
-    Svalid = one_nineteen_meter.s12.s.squeeze()[int(len(one_nineteen_meter.s12.s)/2)]
-    Sone = abs(one_meter.s12.s.squeeze()[int(len(one_nineteen_meter.s12.s)/2)])
-    Shalf = abs(half_meter.s12.s.squeeze()[int(len(one_nineteen_meter.s12.s)/2)])
-    print(len(one_nineteen_meter.s12.s)/2)
+    f = net129cm.frequency.f[int(len(net129cm.s12.s) / 2)]
+    tot_f = net129cm.frequency.f
+    tot_S12_129cm = net129cm.s12.s.squeeze()
+    S12_129cm = net129cm.s12.s.squeeze()[int(len(net129cm.s12.s) / 2)]
+    S12_100cm = net100cm.s12.s.squeeze()[int(len(net129cm.s12.s) / 2)]
+    S12_50cm = net50cm.s12.s.squeeze()[int(len(net129cm.s12.s) / 2)]
 
-    print(f)
+    Gtot = getG(tot_S12_129cm, f, 1.29)
+    G = getG(S12_129cm, f, 1.29)
+    R2 = getR(S12_50cm, f, G)
+    R3 = getR(S12_100cm, f, G)
 
-    print(abs(Svalid))
+    #print(f"Estimated range for 50cm:\n{round(R2,3)} m \nfor 1m: \n{round(R3,3)} m")
 
-    G = getG(abs(Svalid), f, 1.19)
+    plt.figure(figsize=(8, 5))
+    plt.rcParams['font.size'] = '16'
+    plt.plot(tot_f/ 1e9 , 10*np.log10(Gtot))
+    plt.xlabel('Frequency (GHz)', fontsize=15)
+    plt.ylabel('Gain (dB)', fontsize=15)
+    plt.tick_params(axis='both', labelsize=15)
+    plt.grid(True)
 
-
-    print(G)
-    R2 = getR(Shalf, f, G)
-    R3 = getR(Sone, f, G)
-    print(f"Estimated range for 50cm:\n{round(R2,3)} m \nfor 1m: \n{round(R3,3)} m")
+    # plt.xticks(np.linspace(0, 10, 11))
+    # plt.yticks(np.linspace(-180, 180, 10))
+    # plt.xlim(thru.frequency.f.min()/1e9, thru.frequency.f.max()/1e9)
+    # plt.savefig("radiatedpowerPlot.svg")
+    plt.show()
