@@ -15,7 +15,7 @@ def getG(S12, f, r):
 
     wavelength = 3e8 / f
 
-    G = (S12*np.pi*r)/(wavelength)
+    G = (4*S12*np.pi*r)/(wavelength)
 
     return G
 
@@ -32,13 +32,14 @@ if __name__ == '__main__':
     S12_100cm = net100cm.s12.s.squeeze()[int(len(net129cm.s12.s) / 2)]
     S12_50cm = net50cm.s12.s.squeeze()[int(len(net129cm.s12.s) / 2)]
 
-    Gtot = getG(tot_S12_129cm, f, 1.29)
+    Gtot = getG(tot_S12_129cm, tot_f, 1.29)
+    print(Gtot.shape)
     G = getG(S12_129cm, f, 1.29)
     R2 = getR(S12_50cm, f, G)
     R3 = getR(S12_100cm, f, G)
 
     #print(f"Estimated range for 50cm:\n{round(R2,3)} m \nfor 1m: \n{round(R3,3)} m")
-
+    #
     plt.figure(figsize=(8, 5))
     plt.rcParams['font.size'] = '16'
     plt.plot(tot_f/ 1e9 , 10*np.log10(Gtot))
