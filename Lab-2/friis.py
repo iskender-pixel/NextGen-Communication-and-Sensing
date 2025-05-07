@@ -1,6 +1,8 @@
 import skrf as rf
 import numpy as np
 import matplotlib.pyplot as plt
+from pyasn1_modules.rfc5990 import sha512
+
 
 def getR(S12, f, G):    #Calculates the distance between the horns based on Friis equation
     S12 = abs(S12)  #Absolute value is relevant for power transfer
@@ -18,10 +20,6 @@ def getG(S12, f, r):
     G = (4*S12*np.pi*r)/(wavelength)
 
     return G
-
-
-
-
 
 if __name__ == '__main__':
 
@@ -57,3 +55,4 @@ if __name__ == '__main__':
     # plt.xlim(thru.frequency.f.min()/1e9, thru.frequency.f.max()/1e9)
     plt.savefig("gainPlot.svg")
     plt.show()
+
