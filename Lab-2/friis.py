@@ -19,6 +19,10 @@ def getG(S12, f, r):
 
     return G
 
+
+
+
+
 if __name__ == '__main__':
 
     net129cm = rf.Network('direction0-1.29v2.s2p')
@@ -51,5 +55,5 @@ if __name__ == '__main__':
     # plt.xticks(np.linspace(0, 10, 11))
     # plt.yticks(np.linspace(-180, 180, 10))
     # plt.xlim(thru.frequency.f.min()/1e9, thru.frequency.f.max()/1e9)
-    # plt.savefig("radiatedpowerPlot.svg")
+    plt.savefig("gainPlot.svg")
     plt.show()
