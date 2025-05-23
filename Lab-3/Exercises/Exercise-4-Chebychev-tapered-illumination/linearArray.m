@@ -48,7 +48,7 @@
     AF_uniform_mag_dB = 20*log10(abs(AF_uniform));
     AF_uniform_mag_dB = AF_uniform_mag_dB - max(AF_uniform_mag_dB(:));  
     patternCustom(AF_uniform_mag_dB(:),TH_deg(:),PH_deg(:))
-    
+    % clim([-30 0]);
     
     % patternCustom(AF_mag_dB(:),TH_deg(:),PH_deg(:),CoordinateSystem="rectangular", Slice="phi", SliceValue=rad2deg(phi()));
     % hold on
@@ -71,4 +71,4 @@
     Prad_uniform = trapz(phi, trapz(theta, U_uniform.*sin(TH), 2));
     D_uniform = 4*pi*Umax_uniform/Prad_uniform;
     D_uniform_dB = 10*log10(abs(D_uniform));
-    fprintf('Directivity uniform (dB): %.3f dB\n', D_uniform_dB);
+    fprintf('Directivity uniform (dB): %.3f dB\n', D_uniform_dB); 
