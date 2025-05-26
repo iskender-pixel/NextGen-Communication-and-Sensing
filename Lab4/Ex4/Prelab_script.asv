@@ -1,0 +1,23 @@
+Fs = 200e6;
+
+%plot(freqaxis, abs(Sig1))
+%Sig1 is the frequency domain signal of A
+
+%plot(t, real(Sig2))
+%Time domain of a chirp A
+
+%plot(freqaxis, abs(Sig3))
+%Freq domain B
+
+%plot(freqaxis, abs(Sig4))
+%freq domain C
+
+%plot(t, real(Sig5))
+%time domain B
+
+plot(t, Sig6)
+%time domain C
+
+
+
+
